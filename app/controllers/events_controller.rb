@@ -10,9 +10,9 @@ class EventsController < ApplicationController
     @event.location_id = params[:location_id]
 
     if @event.save
-      redirect_to location_event_path(@location, @event)
+      redirect_to location_event_path(@location, @event), notice: 'Event was successfully created.'
     else
-      render location_path(@location)
+      render event_path(@location)
     end
   end
 
@@ -24,39 +24,28 @@ class EventsController < ApplicationController
   def show
     @event = Event.find(params[:id])
     @location = Location.find(params[:location_id])
-
   end
 
   def edit
     @event = Event.find(params[:id])
     @location = Location.find(params[:location_id])
-
   end
 
   def update
     @location = Location.find(params[:location_id])
     @event = Event.find(params[:id])
     if @event.update(event_params)
-      redirect_to location_event_path(@location, @event), notice: 'Project was successfully updated.'
+      redirect_to location_event_path(@location, @event), notice: 'Event was successfully updated.'
     else
       render :edit
     end
   end
 
-
   def destroy
-    @project = Project.find(params[:id])
-    @project.destroy
-    redirect_to @project, notice: 'Project was successfully deleted.'
-  end
-
-
-
-
-
-  def destroy
-    @event = Event.find(params[:id])
     @location = Location.find(params[:location_id])
+    @event = Event.find(params[:id])
+    @event.destroy
+    redirect_to location_path(@location), notice: 'Event was successfully deleted.'
   end
 
   private
